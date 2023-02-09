@@ -6,6 +6,9 @@ import java.util.List;
 
 import com.cognifia.lms.account.dto.AccountDTO;
 import com.cognifia.lms.account.dto.AccountDTOMapper;
+import com.cognifia.lms.account.security.token.utility.UserUtility;
+import com.cognifia.lms.accountfamily.dto.FamilyDTO;
+import com.cognifia.lms.accountfamily.service.FamilyService;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -32,13 +35,36 @@ public class AccountService {
 
 
     public List<AccountDTO> getAccountDTOList() {
-        List<Account> list = userAccountAdapter.getAccountList();
         List<AccountDTO> resultList = new ArrayList<>() ;
+        Account loginUserAccount = getLoginUserAccount();
+        if (loginUserAccount.hasAdminRole()){
+            setAdminUserList(resultList, loginUserAccount);
+        } else {
+            setFamilyUserList(resultList, loginUserAccount);
+        }
+
+        return resultList ;
+    }
+
+    private void setFamilyUserList(List<AccountDTO> resultList, Account loginUserAccount){
+         resultList.add(AccountDTOMapper.INSTANCE.modelToDto(loginUserAccount,
+                    loginUserAccount.getPersonInfo(), loginUserAccount.getEmailAddress().getEmail())) ;
+    }
+
+    private void setAdminUserList(List<AccountDTO> resultList, Account loginUserAccount){
+        List<Account> list = userAccountAdapter.getAccountList();
         list.stream().forEach(x->
                 resultList.add(AccountDTOMapper.INSTANCE.modelToDto(x, x.getPersonInfo(), x.getEmailAddress().getEmail())));
-        return resultList ;
+    }
+
+
+
+    private Account getLoginUserAccount(){
+        int loginUserId = UserUtility.getCurrentLoginUserId() ;
+        return getAccountById(loginUserId) ;
 
     }
+
     public Account getAccountById(int id) {
         return userAccountAdapter.getAccountById(id);
     }

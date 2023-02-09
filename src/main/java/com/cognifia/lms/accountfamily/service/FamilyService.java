@@ -29,13 +29,14 @@ public class FamilyService implements FamilyPort {
     private TokenServicePort tokenService;
 
     public List<FamilyDTO> getFamilyAccountList(int userId) {
+        List<FamilyDTO> results = new ArrayList<>();
         Optional<FamilyMemberEntity> option = memberRepository.findById(userId);
         if (!option.isPresent()) {
-            throw new AppMessageException("family.userid.noexist");
+            //throw new AppMessageException("family.userid.noexist");
+            return results;
         }
 
         FamilyMemberEntity member = option.get();
-        List<FamilyDTO> results = new ArrayList<>();
         List<FamilyMemberEntity> members = memberRepository.findByFamilyId(member.getFamilyId());
         if ((members != null) && !members.isEmpty()) {
             members.forEach(x -> results.add(mapFamilyDTO(x)));

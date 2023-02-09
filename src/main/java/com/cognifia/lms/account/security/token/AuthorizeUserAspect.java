@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.cognifia.lms.account.infrastructure.adapter.UserAccountAdapter;
 import com.cognifia.lms.account.model.SpecialGroupCodeTypeConstant;
+import com.cognifia.lms.account.security.token.utility.UserUtility;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +44,7 @@ public class AuthorizeUserAspect {
         Object[] args = joinPoint.getArgs();
         //BEFORE METHOD EXECUTION
 
-        CurrentUser user = getCurrentUser();
+        CurrentUser user = UserUtility.getCurrentUser();
 
         checkAccessRight(joinPoint, authorizeUser, user);
 
@@ -51,11 +52,6 @@ public class AuthorizeUserAspect {
         return joinPoint.proceed();
 
 
-    }
-
-    private CurrentUser getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return (CurrentUser) auth.getPrincipal();
     }
 
     private void checkAccessRight(ProceedingJoinPoint joinPoint, AuthorizeUser authorizeUser, CurrentUser user) {

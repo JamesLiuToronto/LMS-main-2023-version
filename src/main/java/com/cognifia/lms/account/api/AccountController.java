@@ -42,6 +42,7 @@ public class AccountController {
 
     private AccountService service;
 
+
     @GetMapping(value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "Get UserAccount information",
             description = "This will get user account information by userAccountId ")
