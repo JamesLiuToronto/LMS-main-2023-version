@@ -23,16 +23,16 @@ public class JWTUtility extends AbstractUtility {
         super(secret, duration, keys);
     }
 
-    public UserDTO validatetoken(String token) throws TokenExpiredException {
+    public UserDTO validatetoken(String token) throws AuthorizeException {
         UserDTO user = null ;
         try {
             user = getUserDTOFromToken(token);
         } catch(Exception e) {
-            throw new AuthorizeException("token Is invalid ");
+            throw new AuthorizeException("authorize.token.invalid");
         }
 
         if (user.isExpired()) {
-            throw new TokenExpiredException("token has been expired");
+            throw new TokenExpiredException("authorize.token.expired");
         }
         return user;
     }

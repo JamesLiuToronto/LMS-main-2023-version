@@ -1,6 +1,7 @@
 package com.cognifia.lms.common.annotation.validation.exception;
 
 import com.cognifia.lms.common.annotation.validation.errormessage.ErrorMessage;
+import com.cognifia.lms.common.exception.AppMessageException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class BusinessExceptionHandler {
     @Autowired
     ErrorMessage errorMessage ;
 
-    @ExceptionHandler({RuntimeException.class})
+    @ExceptionHandler({AppMessageException.class})
     @ResponseBody
     //public ResponseEntity<List> processUnmergeException(final MethodArgumentNotValidException ex) {
     public ResponseEntity<List> customerException(final RuntimeException ex){
@@ -67,16 +68,4 @@ public class BusinessExceptionHandler {
         ex.printStackTrace() ;
         return new ResponseEntity<>((new ArrayList<String>(Arrays.asList(error))), HttpStatus.BAD_REQUEST);
     }
-
-/*
-    @ExceptionHandler({EntityNotFoundException.class})
-    @ResponseBody
-    //public ResponseEntity<List> processUnmergeException(final MethodArgumentNotValidException ex) {
-    public ResponseEntity<List> notFoundException(final EntityNotFoundException ex){
-
-        String error = ErrorMessage.toLocale(ex.getMessage()) ;
-        ex.printStackTrace() ;
-        return new ResponseEntity<>((new ArrayList<String>(Arrays.asList(error))), HttpStatus.NOT_FOUND);
-    }*/
-
 }

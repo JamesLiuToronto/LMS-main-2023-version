@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 import com.cognifia.lms.account.dto.AccountDTO;
 import com.cognifia.lms.account.dto.AccountDTOMapper;
 import com.cognifia.lms.account.infrastructure.repository.UserAccountRepository;
+import com.cognifia.lms.account.security.token.AuthorizeException;
 import com.cognifia.lms.common.security.LoginUserInfoUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,7 +55,7 @@ public class LoginService {
         Account account = userAccountAdapter.getAccountByEmailAddress(emailAddress);
         UserLogin login = loginAdapter.getUserLoginById(account.getUserId());
         if (!validatePassword(login, password)) {
-            throw new AppMessageException("userlogin.validation.password_mismatch");
+            throw new AuthorizeException("login.validation.password_mismatch");
         }
         return getLoginDTO(account);
     }
@@ -75,7 +76,7 @@ public class LoginService {
                 account.getEmailAddress().getEmail());
         return LoginDTO.builder().userId(account.getUserId()).
                 token(jwtUtility.createJwtSignedHMAC(userDTO))
-                .acount(dto)
+                .account(dto)
                 .build();
     }
 

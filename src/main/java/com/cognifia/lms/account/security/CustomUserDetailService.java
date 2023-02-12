@@ -3,6 +3,8 @@ package com.cognifia.lms.account.security;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.cognifia.lms.account.security.token.AuthorizeException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,8 +60,12 @@ public class CustomUserDetailService implements UserDetailsService {
         if ((account.getUserStatus() == null) || UserStatus.DISABLE.equals(account.getUserStatus())) {
             throw new AppMessageException("login.validation.disable.user");
         }
+
+        if (UserStatus.PENDING.equals(account.getUserStatus())) {
+            throw new AuthorizeException("login.validation.pending.user");
+        }
         if (login.isLocked()) {
-            throw new AppMessageException("login.validation.locked");
+            throw new AuthorizeException("login.validation.locked");
         }
     }
 }
