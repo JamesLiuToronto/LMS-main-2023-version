@@ -3,6 +3,8 @@ package com.cognifia.lms.account.infrastructure.adapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.cognifia.lms.account.security.token.AuthorizeException;
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;

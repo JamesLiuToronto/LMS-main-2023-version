@@ -4,6 +4,7 @@ import com.cognifia.lms.account.security.token.AuthorizeException;
 import com.cognifia.lms.account.security.token.dto.UserDTO;
 import com.cognifia.lms.account.security.token.utility.JWTUtility;
 import com.cognifia.lms.common.annotation.validation.errormessage.ErrorMessage;
+import com.cognifia.lms.common.exception.AppMessageException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             } catch (AuthorizeException ex){
                 handleAuthorizationException(response, ex) ;
                 return ;
+            } catch (AppMessageException ex){
+                handleAppMessageException(response, ex) ;
+                return ;
             }
         }
 
@@ -72,6 +76,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             } catch (AuthorizeException ex){
                 handleAuthorizationException(response, ex) ;
                 return ;
+            } catch (AppMessageException ex){
+                handleAppMessageException(response, ex) ;
+                return ;
             }
 
         }
@@ -84,6 +91,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         //response.setContentType("application/json");
         response.setContentType("text/plain");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(error);
+    }
+
+    private void handleAppMessageException(HttpServletResponse response, AppMessageException ex) throws IOException {
+        String error = ErrorMessage.toLocale(ex.getMessage()) ;
+        //response.setContentType("application/json");
+        response.setContentType("text/plain");
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         response.getWriter().write(error);
     }
 

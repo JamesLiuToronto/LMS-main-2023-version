@@ -120,13 +120,15 @@ CREATE TABLE account_group_method_map
     note varchar(100) null
 );
 
-insert into account_group_method_map values( 'ALL', 'getLoginUserInfo', now(), null) ;
-insert into account_group_method_map values( 'ADMIN', 'registerNewAccountByAdmin', now(), null) ;
-insert into account_group_method_map values( 'ADMIN', 'activateUserAccount', now(), null) ;
-insert into account_group_method_map values( 'ADMIN', 'deactivateUserAccount', now(), null) ;
-insert into account_group_method_map values( 'ADMIN', 'updateUserInfo', now(), null) ;
-insert into account_group_method_map values( 'FAMILY', 'updateUserInfo', now(), null) ;
+insert into account_group_method_map values( 1, 'ALL', 'getLoginUserInfo', now(), null) ;
+insert into account_group_method_map values(2, 'ADMIN', 'registerNewAccountByAdmin', now(), null) ;
+insert into account_group_method_map values(3, 'ADMIN', 'activateUserAccount', now(), null) ;
+insert into account_group_method_map values(4,  'ADMIN', 'deactivateUserAccount', now(), null) ;
+insert into account_group_method_map values(5,  'ADMIN', 'updateUserInfo', now(), null) ;
+insert into account_group_method_map values(6,  'FAMILY', 'updateUserInfo', now(), null) ;
 
-insert into account_group_method_map values( 'ADMIN', 'updateEmailAddress', now(), null) ;
-insert into account_group_method_map values( 'FAMILY', 'updateEmailAddress', now(), null) ;
-insert into account_group_method_map values( 'ADMIN', 'assignUserGroup', now(), null) ;
+insert into account_group_method_map values(7,  'ADMIN', 'updateEmailAddress', now(), null) ;
+insert into account_group_method_map values(8,  'FAMILY', 'updateEmailAddress', now(), null) ;
+insert into account_group_method_map values(9,  'ADMIN', 'assignUserGroup', now(), null) ;
+
+insert into account_group_method_map values(10 , 'ADMIN', 'getActivateToken', now(), null) ;

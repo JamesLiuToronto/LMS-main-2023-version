@@ -116,6 +116,8 @@ public class AccountService {
     public AccountDTO activateAccount(int userId, int updateUserId) {
         adminOrSelfValidator(userId, updateUserId);
         Account account = userAccountAdapter.getAccountById(userId);
+        if (account.isActive())
+            throw new AppMessageException("userAccount.activate.already-active");
         account.activateAccount();
         userAccountAdapter.persistAccount(account, updateUserId);
         return getAccountDTOById(userId);

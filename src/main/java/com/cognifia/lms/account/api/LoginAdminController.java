@@ -4,6 +4,8 @@ import com.cognifia.lms.account.dto.LoginDTO;
 import com.cognifia.lms.account.model.SpecialGroupCodeTypeConstant;
 import com.cognifia.lms.account.service.LoginService;
 import com.cognifia.lms.account.security.token.AuthorizeUser;
+import com.cognifia.lms.common.dto.ResultStatus;
+import com.cognifia.lms.common.dto.SimpleResultDTO;
 import com.cognifia.lms.common.security.LoginUserInfoUtility;
 import com.cognifia.lms.tokenprocess.TokenServicePort;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,14 +90,18 @@ public class LoginAdminController {
 
     @AuthorizeUser(requiredRoles = {SpecialGroupCodeTypeConstant.SELF})
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/activate-token/{userAccountId}")
+    @GetMapping(value = "/activate-token/{userAccountId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(
             summary = "the API for testing purpose, it should be invisible to user in production, with generate activate token",
             description = "This service is the API with token process general")
-    public String getActivateToken(
+    public SimpleResultDTO getActivateToken(
             @Parameter(description = "userAccountId", required = true) @PathVariable("userAccountId") Integer userAccountId) {
         int updateUserId = LoginUserInfoUtility.getLoginUserId();
-        return tokenServicePort.getActivateAccountToken(userAccountId, updateUserId);
+        String token = tokenServicePort.getActivateAccountToken(userAccountId, updateUserId);
+        return SimpleResultDTO.builder()
+                .status(ResultStatus.SUCCESS.name())
+                .note(token)
+                .build();
     }
 }
 

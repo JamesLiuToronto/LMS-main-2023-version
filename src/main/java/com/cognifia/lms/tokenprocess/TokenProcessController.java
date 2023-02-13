@@ -1,7 +1,10 @@
 package com.cognifia.lms.tokenprocess;
 
+import com.cognifia.lms.common.dto.ResultStatus;
+import com.cognifia.lms.common.dto.SimpleResultDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +30,11 @@ public class TokenProcessController {
     @GetMapping(value = "/{token}")
     @Operation(summary = "the API with token process general",
                description = "This service is the API with token process general")
-    public void tokenProcess(@Parameter(description = "token", required = true) @PathVariable("token") String token) {
+    public SimpleResultDTO tokenProcess(@Parameter(description = "token", required = true) @PathVariable("token") String token) {
         service.process(token);
+        return SimpleResultDTO.builder()
+                .status(ResultStatus.SUCCESS.name())
+                .build();
     }
 
     @ResponseStatus(HttpStatus.OK)
